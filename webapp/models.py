@@ -3,15 +3,13 @@ from django.db import models
 # Create your models here
 
 class Status(models.Model):
-    status_choices = [('new', 'новый'), ('in progress', 'в процессе'), ('done', 'выполнено')]
-    status = models.CharField(max_length=20, choices=status_choices, default='new')
+    status = models.CharField(max_length=20, default='new')
     def __str__(self):
         return f'{self.status}'
 
 
 class Type(models.Model):
-    type_choices = [('task', 'задача'), ('bug', 'ошибка'), ('enhancement', 'улучшение')]
-    type = models.CharField(max_length=20, choices=type_choices, default='task')
+    type = models.CharField(max_length=20, default='task')
     def __str__(self):
         return f'{self.type}'
 

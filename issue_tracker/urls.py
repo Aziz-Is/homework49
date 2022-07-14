@@ -15,11 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from webapp.views import MainpageView, DetailView
+from webapp.views import MainpageView, DetailView, AddView, UpdateView
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('home/', MainpageView.as_view()),
-    path('home/<int:pk>', DetailView.as_view())
+    path('home/', MainpageView.as_view(), name='home'),
+    path('home/<int:pk>', DetailView.as_view(), name ='detail'),
+    path('add/', AddView.as_view()),
+    path('update/<int:pk>',UpdateView.as_view()),
 ]
