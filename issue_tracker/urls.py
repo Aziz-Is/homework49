@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from webapp.views import MainpageView, DetailView, AddView, UpdateView
+from webapp.views import MainpageView, DetailView, AddView, UpdateView, DeleteView
 
 
 urlpatterns = [
@@ -24,4 +24,5 @@ urlpatterns = [
     path('home/<int:pk>', DetailView.as_view(), name ='detail'),
     path('add/', AddView.as_view()),
     path('update/<int:pk>',UpdateView.as_view()),
+    path('delete/<int:pk>',DeleteView.as_view()),
 ]

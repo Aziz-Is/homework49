@@ -58,3 +58,17 @@ class UpdateView(TemplateView):
             obj.save()
             return redirect('home')
         return render (request, 'add.html',{'my_form':form})
+
+class DeleteView(TemplateView):
+    template_name = 'delete.html'
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        obj = Tracker.objects.get(pk=context['pk'])
+        context['task'] = obj
+        return context
+    def post(self, request, *args, **kwargs):
+        obj = Tracker.objects.get(pk=kwargs['pk'])
+        if obj:
+            obj.delete()
+            return redirect('home')
+        return render (request,'delete.html', {'task':obj})
