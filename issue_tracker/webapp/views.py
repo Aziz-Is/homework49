@@ -33,9 +33,10 @@ class AddView(TemplateView):
     def post(self, request, *args, **kwargs):
         form = self.form(request.POST)
         if form.is_valid():
-            Tracker.objects.create(summary=form.cleaned_data['summary'], description=form.cleaned_data['description'],
-                                   status=form.cleaned_data['status'], type=form.cleaned_data['type'])
-
+            types = form.cleaned_data.pop('type')
+            new_tracker = Tracker.objects.create(summary=form.cleaned_data['summary'], description=form.cleaned_data['description'],
+                                   status=form.cleaned_data['status'])
+            new_tracker.tracker_type.set(types)
             return redirect('home')
         return render(request, 'add.html', {'my_form': form})
 
@@ -45,19 +46,20 @@ class UpdateView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         obj = Tracker.objects.get(pk=context['pk'])
-        context['my_form'] = self.form(initial={'summary':obj.summary, 'description': obj.description, 'status':obj.status, 'type':obj.type})
+        context['my_form'] = self.form(initial={'summary':obj.summary, 'description': obj.description, 'status':obj.status, 'type':obj.tracker_type.all()})
         return context
     def post(self, request, *args, **kwargs):
         form = self.form(request.POST)
         if form.is_valid():
+            types = form.cleaned_data.pop('type')
             obj = Tracker.objects.get(pk=kwargs['pk'])
             obj.summary = form.cleaned_data['summary']
             obj.description = form.cleaned_data['description']
             obj.status = form.cleaned_data['status']
-            obj.type = form.cleaned_data['type']
+            obj.tracker_type.set(types)
             obj.save()
             return redirect('home')
-        return render (request, 'add.html',{'my_form':form})
+        return render(request, 'add.html',{'my_form':form})
 
 class DeleteView(TemplateView):
     template_name = 'delete.html'
